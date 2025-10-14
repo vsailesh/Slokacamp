@@ -339,7 +339,7 @@ const CourseDetail = () => {
                           <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                         ))}
                       </div>
-                      <p className="text-sm text-gray-600">{course.reviews.length} reviews</p>
+                      <p className="text-sm text-gray-600">{course.reviewCount} reviews</p>
                     </div>
                   </div>
                   
