@@ -25,7 +25,7 @@ const CourseDetail = () => {
     duration: "4 hours",
     learners: "45.2K",
     rating: 4.8,
-    reviews: 2840,
+    reviewCount: 2840,
     category: "slokas",
     price: "Free",
     enrolled: true,
