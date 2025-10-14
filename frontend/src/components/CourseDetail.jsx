@@ -339,11 +339,11 @@ const CourseDetail = () => {
                           <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                         ))}
                       </div>
-                      <p className="text-sm text-gray-600">{course.reviews} reviews</p>
+                      <p className="text-sm text-gray-600">{course.reviews.length} reviews</p>
                     </div>
                   </div>
                   
-                  {course.reviews.map((review) => (
+                  {course.reviews && course.reviews.map((review) => (
                     <Card key={review.id}>
                       <CardContent className="p-6">
                         <div className="flex items-start justify-between mb-3">
