@@ -17,7 +17,7 @@ class Subscription(models.Model):
     ])
     
     # Stripe integration
-    stripe_subscription_id = serializers.CharField(max_length=255, unique=True, null=True, blank=True)
+    stripe_subscription_id = models.CharField(max_length=255, unique=True, null=True, blank=True)
     stripe_customer_id = models.CharField(max_length=255, null=True, blank=True)
     stripe_payment_method_id = models.CharField(max_length=255, null=True, blank=True)
     
