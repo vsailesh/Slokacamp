@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Course, Chapter, Lesson, Enrollment, LessonProgress
 from django.db.models import Avg, Count
+from django.utils import timezone
 
 class LessonSerializer(serializers.ModelSerializer):
     """Lesson serializer with progress information"""
