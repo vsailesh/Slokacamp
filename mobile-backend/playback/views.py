@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from django.utils import timezone
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from django.db import models
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 import secrets
