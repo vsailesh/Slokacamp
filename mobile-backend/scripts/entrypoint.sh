@@ -87,11 +87,10 @@ if [ -d "fixtures" ] && [ "$(ls -A fixtures)" ]; then
     done
 fi
 
-# Create default subscription plans if they don't exist
+# Create default subscription plans
 echo "Setting up default subscription plans..."
 python manage.py shell << 'EOF'
 from payments.models import SubscriptionPlan
-import uuid
 
 plans = [
     {
@@ -151,61 +150,7 @@ for var in "${required_vars[@]}"; do
     fi
 done
 
-# Validate Stripe configuration (if not in development)
-if [ "${DEBUG:-False}" != "True" ]; then
-    stripe_vars=("STRIPE_SECRET_KEY" "STRIPE_PUBLISHABLE_KEY" "STRIPE_WEBHOOK_SECRET")
-    for var in "${stripe_vars[@]}"; do
-        if [ -z "${!var}" ]; then
-            echo "WARNING: Stripe variable $var is not set. Payment features will not work."
-        fi
-    done
-fi
-
-# Test database connection
-echo "Testing database connection..."
-python manage.py shell << 'EOF'
-try:
-    from django.db import connection
-    cursor = connection.cursor()
-    cursor.execute("SELECT 1")
-    print("Database connection: OK")
-except Exception as e:
-    print(f"Database connection failed: {e}")
-    exit(1)
-EOF
-
-# Test Redis connection
-echo "Testing Redis connection..."
-python -c "
-import redis
-import os
-try:
-    r = redis.from_url(os.environ.get('REDIS_URL', 'redis://redis:6379/1'))
-    r.ping()
-    print('Redis connection: OK')
-except Exception as e:
-    print(f'Redis connection failed: {e}')
-    exit(1)
-"
-
-# Health check endpoint test (if server is running)
-if pgrep -f "gunicorn" > /dev/null; then
-    echo "Testing health check endpoint..."
-    curl -f http://localhost:8000/api/health/ || echo "Warning: Health check failed"
-fi
-
 echo "Setup completed successfully!"
-
-# Log startup information
-echo "========================================"
-echo "Ayurveda E-Learning Platform Ready"
-echo "========================================"
-echo "Environment: ${DEBUG:-False}" 
-echo "Database: ${DB_HOST:-postgres}:${DB_PORT:-5432}/${DB_NAME}"
-echo "Redis: ${REDIS_HOST:-redis}:6379"
-echo "Time: $(date)"
-echo "Version: ${APP_VERSION:-dev}"
-echo "========================================"
 
 # Start the application
 exec "$@"
