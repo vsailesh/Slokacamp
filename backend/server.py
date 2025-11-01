@@ -242,6 +242,36 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+@app.on_event("startup")
+async def create_default_admin():
+    """Create default admin user if not exists"""
+    admin_email = "admin@slokcamp.com"
+    admin_password = "Admin@123"
+    
+    # Check if admin already exists
+    existing_admin = await db.users.find_one({"email": admin_email}, {"_id": 0})
+    
+    if not existing_admin:
+        # Create admin user
+        admin_user = User(
+            email=admin_email,
+            full_name="Administrator",
+            role="admin"
+        )
+        
+        hashed_password = get_password_hash(admin_password)
+        admin_in_db = UserInDB(**admin_user.model_dump(), hashed_password=hashed_password)
+        
+        doc = admin_in_db.model_dump()
+        doc['created_at'] = doc['created_at'].isoformat()
+        
+        await db.users.insert_one(doc)
+        logger.info(f"Default admin user created: {admin_email}")
+    else:
+        logger.info("Admin user already exists")
+
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
