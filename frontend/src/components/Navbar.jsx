@@ -81,12 +81,35 @@ const Navbar = () => {
 
             {/* Auth Buttons */}
             <div className="hidden md:flex items-center space-x-3">
-              <Button variant="ghost" asChild>
-                <Link to="/login">Sign In</Link>
-              </Button>
-              <Button className="bg-orange-600 hover:bg-orange-700 text-white" asChild>
-                <Link to="/signup">Start Learning</Link>
-              </Button>
+              {user ? (
+                <>
+                  <span className="text-sm text-gray-600">Welcome, {user.full_name}</span>
+                  {isAdmin() && (
+                    <Button variant="outline" asChild>
+                      <Link to="/admin">Admin</Link>
+                    </Button>
+                  )}
+                  <Button variant="ghost" asChild>
+                    <Link to="/dashboard">Dashboard</Link>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={handleLogout}
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  >
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="ghost" asChild>
+                    <Link to="/signin">Sign In</Link>
+                  </Button>
+                  <Button className="bg-orange-600 hover:bg-orange-700 text-white" asChild>
+                    <Link to="/signup">Start Learning</Link>
+                  </Button>
+                </>
+              )}
             </div>
 
             {/* Mobile menu button */}
