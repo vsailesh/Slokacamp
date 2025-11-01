@@ -1,0 +1,75 @@
+<analysis>
+The trajectory outlines two distinct phases of development. Initially, the AI engineer successfully created a pixel-perfect, frontend-only clone of DataCamp, adapted for Sanskrit slokas and Ayurvedic courses, using React, Tailwind CSS, and Shadcn UI components. This involved extensive component creation, mock data integration, and meticulous UI replication, verified through screenshots.
+
+A significant pivot occurred when the user requested to transform this into a comprehensive mobile e-learning platform (iOS/Android) with a completely new stack: React Native for frontend and Django REST Framework, PostgreSQL, and Redis for backend, alongside AWS services, DRM, and Stripe integration. The AI engineer has initiated this complex architectural change, scaffolding the new project directories, implementing core Django models and initial React Native components. However, the process is currently encountering repeated  errors and import issues during the development of Django serializers, indicating that the new mobile platform is only partially implemented and requires substantial further work to address these blockers and complete the outlined features.
+</analysis>
+
+<product_requirements>
+The initial request was to clone DataCamp's website into a SlokaCamp web application. This involved replicating the design, layout, colors, fonts, images, animations, and structure for practicing slokas and watching Ayurvedic courses, initially with mock data. This phase resulted in a functional frontend demonstrating a homepage, course listings, a user dashboard, course detail pages, and a lesson player, all closely mirroring DataCamp's UI.
+
+The current, overarching requirement is to transform the concept into a comprehensive Ayurvedic e-learning *mobile application* (iOS + Android) with a robust backend. Key features include: email/password and social sign-in (Google, Facebook, Apple) with JWT auth; single active device enforcement; DRM-protected video hosting (S3, CloudFront, MediaConvert/VdoCipher) with time-limited signed URLs; playback session management (, ,  APIs); screen capture detection/blocking on both platforms; a landing dashboard, DRM-enabled video player, Django admin panel, and Stripe integration for subscriptions. Non-functional requirements specify PostgreSQL, Redis, Dockerization, CI/CD, and monitoring. Extensive security measures, API specifications (OpenAPI), and deployment documentation are also required.
+</product_requirements>
+
+<key_technical_concepts>
+- **Frontend (Initial Web App):** React, React Router, Tailwind CSS, Shadcn UI, Axios.
+- **Backend (Initial Web App):** FastAPI, MongoDB, ,  (AsyncIOMotorClient), .
+- **Frontend (Mobile App Pivot):** React Native, React Navigation, React Context API, Native Modules.
+- **Backend (Mobile App Pivot):** Django REST Framework, PostgreSQL, Redis, JWT Authentication, AWS (S3, CloudFront, MediaConvert), DRM (VdoCipher/MediaPackage), Stripe.
+- **Infrastructure:** Docker, Supervisor, Kubernetes Ingress.
+</key_technical_concepts>
+
+<code_architecture>
+The project evolved from a web application to a mobile application.
+
+**1. Initial Web Application Structure (React/FastAPI/MongoDB):**
+
+   - : Centralized mock data for all frontend components (courses, users, dashboard stats). Initially caused a rendering error for reviews due to object structure.
+   - : Main React component managing routing (, , ) for , , , , . Also contained an initial API call example.
+   - : Displays the main landing page, including  and  components.
+   - : User-specific learning overview, showing progress, streaks, and enrolled courses.
+   - : Detailed view for a single course, including description, content, instructor, and reviews. Involved a fix for displaying review objects.
+   - : Interactive component for playing audio/video lessons, showing transcripts and practice elements.
+   - : FastAPI application, defining  prefixed routes and interacting with MongoDB. Includes a basic  endpoint and  for status checks.
+
+**2. New Mobile Application Structure (Partially Implemented Django/React Native):**
+
+   - : Defines Python dependencies for the Django backend.
+   - : Defines Django models for User authentication, with a fix for  import.
+   - : Defines models for user devices and push tokens.
+   - : Defines models for courses and lessons.
+   - : Defines models for playback sessions.
+   - : Defines models for subscription and payment details.
+   - : Implements API views for user registration and login.
+   - : Implements API views for device registration and management.
+   - , : Partially implemented serializers, currently facing import errors.
+   - : Skeleton for API documentation using OpenAPI 3.0.
+   - : Main React Native component.
+   - : For managing authentication state in React Native.
+   - : Handles device registration and single-device policy.
+   - : Implements native logic for screen capture detection.
+</code_architecture>
+
+<pending_tasks>
+- Complete implementation of Django REST backend APIs for authentication (refresh token), social sign-in, S3 signed URL generation, Stripe integration, and full playback lifecycle.
+- Complete Django models for all specified entities and ensure proper relationships.
+- Resolve import errors in Django serializers (e.g., , ).
+- Implement the React Native app's full UI for all features: login/signup, dashboard, video player with DRM, in-app purchases.
+- Integrate actual DRM provider (VdoCipher/AWS MediaPackage) and push notification services.
+- Set up PostgreSQL and Redis, and configure Docker for the new stack.
+- Implement admin panel, analytics, and comprehensive security features.
+- Create deployment instructions and full API/data model documentation.
+</pending_tasks>
+
+<current_work>
+The project has undergone a significant architectural pivot from a React/FastAPI/MongoDB web application to a React Native/Django REST/PostgreSQL mobile application. The AI engineer is currently in the process of building out this new mobile-first platform.
+
+On the backend (), the foundational Django project structure has been established. Key Django models for , , , , and  have been created or scaffolded. Initial API views for  (registration, login) and  (registration, management) are in place. Serializers for  and  have been partially implemented, but the process is stalled due to persistent  errors, specifically an  related to  in . An  skeleton for API documentation has also been created.
+
+On the frontend (), the basic React Native application structure is set up. Initial components like , , , and  have been created, along with service modules for , , and .
+
+The current state is mid-implementation of the new, complex mobile e-learning platform, with core backend models and some initial views/serializers in progress. The immediate blocking issue is resolving the repeated  errors and s encountered during Django serializer development, preventing further progress on the comprehensive feature set.
+</current_work>
+
+<optional_next_step>
+Address and resolve the  errors and  in  to continue implementing the Django serializers.
+</optional_next_step>
