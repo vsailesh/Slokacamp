@@ -302,10 +302,6 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Signup API Endpoint"
-    - "Signin API Endpoint"
-    - "Get Current User Endpoint"
-    - "Admin Users List Endpoint"
     - "AuthContext for Authentication State"
     - "Signin Component"
     - "Signup Component"
@@ -314,8 +310,9 @@ test_plan:
     - "Updated Navbar with Auth"
     - "App.js Routing with Auth"
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
+  backend_testing_complete: true
 
 agent_communication:
   - agent: "main"
