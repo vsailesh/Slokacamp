@@ -108,6 +108,122 @@ async def get_status_checks():
     
     return status_checks
 
+
+# Authentication Routes
+@api_router.post("/auth/signup", response_model=Token, status_code=status.HTTP_201_CREATED)
+async def signup(user_data: UserCreate):
+    """Register a new user"""
+    # Check if user already exists
+    existing_user = await db.users.find_one({"email": user_data.email}, {"_id": 0})
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already registered"
+        )
+    
+    # Hash the password
+    hashed_password = get_password_hash(user_data.password)
+    
+    # Create user object
+    user_dict = user_data.model_dump(exclude={"password"})
+    user_obj = User(**user_dict)
+    
+    # Store user in database
+    user_in_db = UserInDB(**user_obj.model_dump(), hashed_password=hashed_password)
+    doc = user_in_db.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    
+    await db.users.insert_one(doc)
+    
+    # Create access token
+    access_token = create_access_token(
+        data={"sub": user_obj.id, "email": user_obj.email, "role": user_obj.role}
+    )
+    
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+        user=user_obj
+    )
+
+
+@api_router.post("/auth/signin", response_model=Token)
+async def signin(credentials: UserLogin):
+    """Authenticate user and return token"""
+    # Find user by email
+    user_doc = await db.users.find_one({"email": credentials.email}, {"_id": 0})
+    
+    if not user_doc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password"
+        )
+    
+    # Convert ISO string back to datetime
+    if isinstance(user_doc.get('created_at'), str):
+        user_doc['created_at'] = datetime.fromisoformat(user_doc['created_at'])
+    
+    user_in_db = UserInDB(**user_doc)
+    
+    # Verify password
+    if not verify_password(credentials.password, user_in_db.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password"
+        )
+    
+    # Check if user is active
+    if not user_in_db.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User account is disabled"
+        )
+    
+    # Create access token
+    access_token = create_access_token(
+        data={"sub": user_in_db.id, "email": user_in_db.email, "role": user_in_db.role}
+    )
+    
+    # Convert UserInDB to User for response
+    user_obj = User(**user_in_db.model_dump(exclude={"hashed_password"}))
+    
+    return Token(
+        access_token=access_token,
+        token_type="bearer",
+        user=user_obj
+    )
+
+
+@api_router.get("/auth/me", response_model=User)
+async def get_me(current_user: dict = Depends(get_current_user)):
+    """Get current authenticated user"""
+    user_doc = await db.users.find_one({"id": current_user["sub"]}, {"_id": 0})
+    
+    if not user_doc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    # Convert ISO string back to datetime
+    if isinstance(user_doc.get('created_at'), str):
+        user_doc['created_at'] = datetime.fromisoformat(user_doc['created_at'])
+    
+    return User(**user_doc)
+
+
+@api_router.get("/admin/users", response_model=List[User])
+async def get_all_users(current_user: dict = Depends(get_current_admin_user)):
+    """Get all users (admin only)"""
+    users = await db.users.find({}, {"_id": 0, "hashed_password": 0}).to_list(1000)
+    
+    # Convert ISO string timestamps back to datetime objects
+    for user in users:
+        if isinstance(user.get('created_at'), str):
+            user['created_at'] = datetime.fromisoformat(user['created_at'])
+    
+    return users
+
 # Include the router in the main app
 app.include_router(api_router)
 
