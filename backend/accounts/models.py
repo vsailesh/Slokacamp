@@ -1,4 +1,4 @@
-from django.contrib.auth.models.py import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 import uuid
 
