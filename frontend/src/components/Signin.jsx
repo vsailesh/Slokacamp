@@ -40,8 +40,9 @@ const Signin = () => {
         throw new Error(data.detail || 'Sign in failed');
       }
 
-      // Store token and user data
-      login(data.access_token, data.user);
+      // Store token and user data - Django uses 'access' not 'access_token'
+      const token = data.access_token || data.access;
+      login(token, data.user);
 
       // Navigate to dashboard
       navigate('/dashboard');
