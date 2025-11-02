@@ -53,12 +53,11 @@ const Signup = () => {
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
         throw new Error(data.detail || data.email?.[0] || 'Sign up failed');
       }
-
-      const data = await response.json();
       
       // Store token and user data - Django uses 'access' not 'access_token'
       const token = data.access_token || data.access;
@@ -67,7 +66,8 @@ const Signup = () => {
       // Navigate to dashboard
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message);
+      console.error('Signup error:', err);
+      setError(err.message || 'An error occurred during sign up');
     } finally {
       setLoading(false);
     }
