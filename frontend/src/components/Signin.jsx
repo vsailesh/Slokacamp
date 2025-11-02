@@ -34,12 +34,11 @@ const Signin = () => {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.detail || 'Sign in failed');
-      }
-
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || data.non_field_errors?.[0] || 'Sign in failed');
+      }
       
       // Store token and user data - Django uses 'access' not 'access_token'
       const token = data.access_token || data.access;
@@ -48,7 +47,8 @@ const Signin = () => {
       // Navigate to dashboard
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message);
+      console.error('Signin error:', err);
+      setError(err.message || 'An error occurred during sign in');
     } finally {
       setLoading(false);
     }
