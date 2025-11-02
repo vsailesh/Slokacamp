@@ -26,7 +26,7 @@ const Signin = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/signin`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/auth/signin/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,12 +34,13 @@ const Signin = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
+        const data = await response.json();
         throw new Error(data.detail || 'Sign in failed');
       }
 
+      const data = await response.json();
+      
       // Store token and user data - Django uses 'access' not 'access_token'
       const token = data.access_token || data.access;
       login(token, data.user);
