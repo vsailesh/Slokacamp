@@ -13,6 +13,11 @@ import Signin from './components/Signin';
 import Signup from './components/Signup';
 import AdminDashboard from './components/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import CareerTracks from './components/CareerTracks';
+import LiveClasses from './components/LiveClasses';
+import ForBusiness from './components/ForBusiness';
+import Discussions from './components/Discussions';
+import DiscussionDetail from './components/DiscussionDetail';
 
 function App() {
   return (
@@ -42,6 +47,13 @@ function App() {
                 <Footer />
               </>
             } />
+            
+            {/* New Pages */}
+            <Route path="/career-tracks" element={<CareerTracks />} />
+            <Route path="/live-classes" element={<LiveClasses />} />
+            <Route path="/for-business" element={<ForBusiness />} />
+            <Route path="/discussions" element={<Discussions />} />
+            <Route path="/discussions/:id" element={<DiscussionDetail />} />
             
             {/* Auth routes without Navbar */}
             <Route path="/signin" element={<Signin />} />
@@ -77,29 +89,6 @@ function App() {
               <ProtectedRoute adminOnly={true}>
                 <AdminDashboard />
               </ProtectedRoute>
-            } />
-            
-            {/* Placeholder routes */}
-            <Route path="/career-tracks" element={
-              <>
-                <Navbar />
-                <div className="py-20 text-center">Career Tracks page coming soon...</div>
-                <Footer />
-              </>
-            } />
-            <Route path="/live-classes" element={
-              <>
-                <Navbar />
-                <div className="py-20 text-center">Live Classes page coming soon...</div>
-                <Footer />
-              </>
-            } />
-            <Route path="/for-business" element={
-              <>
-                <Navbar />
-                <div className="py-20 text-center">Business page coming soon...</div>
-                <Footer />
-              </>
             } />
           </Routes>
         </AuthProvider>
