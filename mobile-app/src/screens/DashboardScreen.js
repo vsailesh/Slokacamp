@@ -26,7 +26,9 @@ export default function DashboardScreen({ navigation }) {
       const response = await coursesAPI.getMyEnrollments();
       setEnrollments(response.data.results || response.data);
     } catch (error) {
-      console.error('Error loading enrollments:', error);
+      if (__DEV__) {
+        console.error('Error loading enrollments:', error);
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);

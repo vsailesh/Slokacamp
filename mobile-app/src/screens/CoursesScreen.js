@@ -43,7 +43,9 @@ export default function CoursesScreen({ navigation }) {
       const response = await coursesAPI.getAllCourses(params);
       setCourses(response.data.results || response.data);
     } catch (error) {
-      console.error('Error loading courses:', error);
+      if (__DEV__) {
+        console.error('Error loading courses:', error);
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);

@@ -27,7 +27,9 @@ export default function CourseDetailScreen({ route, navigation }) {
       const response = await coursesAPI.getCourse(courseId);
       setCourse(response.data);
     } catch (error) {
-      console.error('Error loading course:', error);
+      if (__DEV__) {
+        console.error('Error loading course:', error);
+      }
       Alert.alert('Error', 'Failed to load course details');
     } finally {
       setLoading(false);

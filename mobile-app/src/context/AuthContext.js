@@ -22,7 +22,9 @@ export const AuthProvider = ({ children }) => {
         setUser(JSON.parse(storedUser));
       }
     } catch (error) {
-      console.error('Error loading auth:', error);
+      if (__DEV__) {
+        console.error('Error loading auth:', error);
+      }
     } finally {
       setLoading(false);
     }

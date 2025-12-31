@@ -13,26 +13,34 @@ const api = axios.create({
   },
 });
 
-// Add request interceptor for debugging
+// Add request interceptor for debugging (development only)
 api.interceptors.request.use(
   (config) => {
-    console.log(`[API Request] ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
+    if (__DEV__) {
+      console.log(`[API Request] ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
+    }
     return config;
   },
   (error) => {
-    console.error('[API Request Error]', error);
+    if (__DEV__) {
+      console.error('[API Request Error]', error);
+    }
     return Promise.reject(error);
   }
 );
 
-// Add response interceptor for debugging
+// Add response interceptor for debugging (development only)
 api.interceptors.response.use(
   (response) => {
-    console.log(`[API Response] ${response.config.method?.toUpperCase()} ${response.config.url} - Status: ${response.status}`);
+    if (__DEV__) {
+      console.log(`[API Response] ${response.config.method?.toUpperCase()} ${response.config.url} - Status: ${response.status}`);
+    }
     return response;
   },
   (error) => {
-    console.error(`[API Error] ${error.config?.method?.toUpperCase()} ${error.config?.url}`, error.response?.data || error.message);
+    if (__DEV__) {
+      console.error(`[API Error] ${error.config?.method?.toUpperCase()} ${error.config?.url}`, error.response?.data || error.message);
+    }
     return Promise.reject(error);
   }
 );

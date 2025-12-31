@@ -35,13 +35,17 @@ export default function SigninScreen({ navigation }) {
       const userData = response.data?.user;
       
       if (!accessToken) {
-        console.error('Sign in response:', response.data);
+        if (__DEV__) {
+          console.error('Sign in response:', response.data);
+        }
         Alert.alert('Sign In Error', 'Invalid response from server. Missing access token.');
         return;
       }
       
       if (!userData) {
-        console.error('Sign in response:', response.data);
+        if (__DEV__) {
+          console.error('Sign in response:', response.data);
+        }
         Alert.alert('Sign In Error', 'Invalid response from server. Missing user data.');
         return;
       }
@@ -51,9 +55,11 @@ export default function SigninScreen({ navigation }) {
       
       // Navigation will happen automatically via AuthContext
     } catch (error) {
-      console.error('Sign in error:', error);
-      console.error('Error response:', error.response?.data);
-      console.error('Error status:', error.response?.status);
+      if (__DEV__) {
+        console.error('Sign in error:', error);
+        console.error('Error response:', error.response?.data);
+        console.error('Error status:', error.response?.status);
+      }
       
       let message = 'Sign in failed';
       
