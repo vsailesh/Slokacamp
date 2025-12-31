@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Menu, X } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, logout, isAdmin } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   const categories = [
     'Sanskrit Slokas',
@@ -66,6 +74,9 @@ const Navbar = () => {
               <Link to="/live-classes" className="text-gray-700 hover:text-orange-600 font-medium">
                 Live Classes
               </Link>
+              <Link to="/discussions" className="text-gray-700 hover:text-orange-600 font-medium">
+                Discussions
+              </Link>
               <Link to="/for-business" className="text-gray-700 hover:text-orange-600 font-medium">
                 For Business
               </Link>
@@ -73,12 +84,35 @@ const Navbar = () => {
 
             {/* Auth Buttons */}
             <div className="hidden md:flex items-center space-x-3">
-              <Button variant="ghost" asChild>
-                <Link to="/login">Sign In</Link>
-              </Button>
-              <Button className="bg-orange-600 hover:bg-orange-700 text-white" asChild>
-                <Link to="/signup">Start Learning</Link>
-              </Button>
+              {user ? (
+                <>
+                  <span className="text-sm text-gray-600">Welcome, {user.full_name}</span>
+                  {isAdmin() && (
+                    <Button variant="outline" asChild>
+                      <Link to="/admin">Admin</Link>
+                    </Button>
+                  )}
+                  <Button variant="ghost" asChild>
+                    <Link to="/dashboard">Dashboard</Link>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={handleLogout}
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  >
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="ghost" asChild>
+                    <Link to="/signin">Sign In</Link>
+                  </Button>
+                  <Button className="bg-orange-600 hover:bg-orange-700 text-white" asChild>
+                    <Link to="/signup">Start Learning</Link>
+                  </Button>
+                </>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -104,16 +138,42 @@ const Navbar = () => {
                 <Link to="/live-classes" className="text-gray-700 hover:text-orange-600 font-medium">
                   Live Classes
                 </Link>
+                <Link to="/discussions" className="text-gray-700 hover:text-orange-600 font-medium">
+                  Discussions
+                </Link>
                 <Link to="/for-business" className="text-gray-700 hover:text-orange-600 font-medium">
                   For Business
                 </Link>
                 <div className="pt-4 border-t border-gray-200 flex flex-col space-y-2">
-                  <Button variant="ghost" asChild>
-                    <Link to="/login">Sign In</Link>
-                  </Button>
-                  <Button className="bg-orange-600 hover:bg-orange-700 text-white" asChild>
-                    <Link to="/signup">Start Learning</Link>
-                  </Button>
+                  {user ? (
+                    <>
+                      <div className="text-sm text-gray-600 px-4">Welcome, {user.full_name}</div>
+                      {isAdmin() && (
+                        <Button variant="outline" asChild>
+                          <Link to="/admin">Admin Dashboard</Link>
+                        </Button>
+                      )}
+                      <Button variant="ghost" asChild>
+                        <Link to="/dashboard">My Dashboard</Link>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        onClick={handleLogout}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        Sign Out
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button variant="ghost" asChild>
+                        <Link to="/signin">Sign In</Link>
+                      </Button>
+                      <Button className="bg-orange-600 hover:bg-orange-700 text-white" asChild>
+                        <Link to="/signup">Start Learning</Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
