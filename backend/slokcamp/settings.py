@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'accounts',
     'courses',
     'analytics',
+    'device_management',
 ]
 
 MIDDLEWARE = [
