@@ -18,6 +18,7 @@ import LiveClasses from './components/LiveClasses';
 import ForBusiness from './components/ForBusiness';
 import Discussions from './components/Discussions';
 import DiscussionDetail from './components/DiscussionDetail';
+import AITutorButton from './components/AITutorButton';
 
 function App() {
   return (
