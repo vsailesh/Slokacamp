@@ -367,6 +367,30 @@ frontend:
         agent: "main"
         comment: "Wrapped app with AuthProvider. Added signin/signup routes. Protected dashboard and lesson routes. Admin route requires admin role. All routes tested."
 
+  - task: "AI Tutor Chat Widget"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/AITutorWidget.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Beautiful floating chat widget with minimize/maximize, message history, loading states, context awareness, tool call display, real-time messaging with GPT-5.2 backend."
+
+  - task: "AI Tutor Button Component"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/AITutorButton.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Omnipresent floating button that opens AI chat. Shows only for authenticated users. Integrated into App.js to appear on all pages."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
