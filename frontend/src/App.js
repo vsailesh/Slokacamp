@@ -92,6 +92,9 @@ function App() {
               </ProtectedRoute>
             } />
           </Routes>
+          
+          {/* AI Tutor Button - Omnipresent for authenticated users */}
+          <AITutorButton />
         </AuthProvider>
       </BrowserRouter>
     </div>
