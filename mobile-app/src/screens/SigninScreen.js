@@ -29,14 +29,50 @@ export default function SigninScreen({ navigation }) {
     setLoading(true);
     try {
       const response = await authAPI.signin({ email, password });
-      const { access, user } = response.data;
       
-      setAuthToken(access);
-      await login(access, user);
+      // Handle different response structures
+      const accessToken = response.data?.access || response.data?.access_token;
+      const userData = response.data?.user;
+      
+      if (!accessToken) {
+        console.error('Sign in response:', response.data);
+        Alert.alert('Sign In Error', 'Invalid response from server. Missing access token.');
+        return;
+      }
+      
+      if (!userData) {
+        console.error('Sign in response:', response.data);
+        Alert.alert('Sign In Error', 'Invalid response from server. Missing user data.');
+        return;
+      }
+      
+      setAuthToken(accessToken);
+      await login(accessToken, userData);
       
       // Navigation will happen automatically via AuthContext
     } catch (error) {
-      const message = error.response?.data?.detail || 'Sign in failed';
+      console.error('Sign in error:', error);
+      console.error('Error response:', error.response?.data);
+      console.error('Error status:', error.response?.status);
+      
+      let message = 'Sign in failed';
+      
+      if (error.response) {
+        // Server responded with error
+        const errorData = error.response.data;
+        message = errorData?.detail || 
+                  errorData?.message || 
+                  errorData?.error || 
+                  errorData?.non_field_errors?.[0] ||
+                  `Server error: ${error.response.status}`;
+      } else if (error.request) {
+        // Request made but no response
+        message = 'No response from server. Please check your internet connection.';
+      } else {
+        // Error setting up request
+        message = error.message || 'An unexpected error occurred';
+      }
+      
       Alert.alert('Sign In Error', message);
     } finally {
       setLoading(false);

@@ -58,24 +58,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'slokcamp.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Database configuration: default to SQLite but allow PostgreSQL via env vars
+if os.getenv('USE_POSTGRES', '0') == '1' or os.getenv('POSTGRES_HOST'):
+    DATABASES = {
+        'default': {
+            'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
+            'NAME': os.getenv('POSTGRES_DB', 'slokcamp_db'),
+            'USER': os.getenv('POSTGRES_USER', 'slokcamp_user'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'slokcamp_pass_2024'),
+            'HOST': os.getenv('POSTGRES_HOST', 'db'),
+            'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        }
     }
-}
-
-# Uncomment below for PostgreSQL when ready
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('POSTGRES_DB', 'slokcamp_db'),
-#         'USER': os.getenv('POSTGRES_USER', 'slokcamp_user'),
-#         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'slokcamp_pass_2024'),
-#         'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
-#         'PORT': os.getenv('POSTGRES_PORT', '5432'),
-#     }
-# }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
