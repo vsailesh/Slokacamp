@@ -60,21 +60,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'slokcamp.wsgi.application'
 
-# Database - PostgreSQL
+# Database - SQLite for now (PostgreSQL ready when service available)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'slokcamp_prod'),
-        'USER': os.getenv('POSTGRES_USER', 'slokcamp_user'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'slokcamp_secure_2024'),
-        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
-        'CONN_MAX_AGE': 600,
-        'OPTIONS': {
-            'connect_timeout': 10,
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# PostgreSQL Configuration (use when service is available)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('POSTGRES_DB', 'slokcamp_prod'),
+#         'USER': os.getenv('POSTGRES_USER', 'slokcamp_user'),
+#         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'slokcamp_secure_2024'),
+#         'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
+#         'PORT': os.getenv('POSTGRES_PORT', '5432'),
+#         'CONN_MAX_AGE': 600,
+#         'OPTIONS': {
+#             'connect_timeout': 10,
+#         }
+#     }
+# }
 
 # Redis Configuration
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
