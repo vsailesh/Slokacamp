@@ -103,14 +103,15 @@
 #====================================================================================================
 
 user_problem_statement: |
-  Add Signup and Signin functionality to SlokaCamp app with admin access control.
+  Confirmed and proceed with Phase 4: AI Integration
   Requirements:
-  - Create signup and signin pages
-  - Admin should be able to sign in and access admin dashboard
-  - Provide admin credentials for access
-  - Implement JWT authentication
-  - Protected routes for authenticated users
-  - Admin-only routes for admin users
+  - Create comprehensive AI Tutor system with MCP (Model Context Protocol) integration
+  - Omnipresent AI chat widget accessible throughout the app
+  - Multi-domain expertise: payments, courses, live classes, Sanskrit slokas, Ayurveda
+  - Admin upload system for knowledge base management
+  - MCP tools for accessing app data (courses, enrollments, payments, etc.)
+  - RAG (Retrieval Augmented Generation) for knowledge base search
+  - Context-aware responses based on user's current page/activity
 
 backend:
   - task: "User Model and Authentication Schema"
