@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'analytics',
     'payments',
     'device_management',
+    'ai_tutor',
 ]
 
 MIDDLEWARE = [
