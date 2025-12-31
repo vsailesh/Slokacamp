@@ -19,7 +19,10 @@ from .rag_service import rag_service
 import asyncio
 import logging
 import uuid
-import PyPDF2
+try:
+    import PyPDF2
+except ImportError:
+    PyPDF2 = None
 import io
 
 logger = logging.getLogger(__name__)
